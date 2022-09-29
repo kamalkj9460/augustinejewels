@@ -1,0 +1,617 @@
+{% if section.settings.message %}
+  <style>
+    {% if section.settings.logo != blank %}
+      .site-header__logo-image {
+        max-width: {{ section.settings.logo_max_width | escape }}px;
+      }
+    {% endif %}
+
+    {% if section.settings.align_logo == 'left' %}
+      .site-header__logo-image {
+        margin: 0;
+      }
+    {% endif %}
+  </style>
+{% endif %}
+
+<div id="stickyheader" data-section-id="{{ section.id }}" data-section-type="header-section" class="{%- if template == 'index' -%} homeheader1 {%- endif -%}">
+  {% if section.settings.message %}
+    {% if section.settings.home_page_only == false or template.name == 'index' %}
+      <style>
+        .announcement-bar {
+          background-color: {{ section.settings.color_bg }};
+        }
+
+        .announcement-bar--link:hover {
+          {% assign brightness = section.settings.color_bg | color_brightness %}
+
+          {% if brightness <= 192 %}
+            {% assign lightenAmount = 255 | minus: brightness | divided_by: 255 | times: 16 %}
+            background-color: {{ section.settings.color_bg | color_lighten: lightenAmount }};
+          {% else %}
+            {% assign darkenAmount = 255 | divided_by: brightness | times: 8 %}
+            background-color: {{ section.settings.color_bg | color_darken: darkenAmount }};
+          {% endif %}
+        }
+
+        .announcement-bar__message {
+          color: {{ section.settings.color_text }};
+        }
+      </style>
+
+      {% if section.settings.message_link == blank %}
+        <div class="announcement-bar">
+      {% else %}
+        <a href="{{ section.settings.message_link }}" class="announcement-bar announcement-bar--link">
+      {% endif %}
+
+        <p class="announcement-bar__message">{{ section.settings.message_text | escape }}</p>
+
+      {% if section.settings.message_link == blank %}
+        </div>
+      {% else %}
+        </a>
+      {% endif %}
+
+    {% endif %}
+  {% endif %}
+
+  <header class="site-header{% if section.settings.align_logo == 'left' %} border-bottom logo--left{% else %} logo--center{% endif %}  {%- if template == 'index' -%} homeheader2 {%- endif -%}" role="banner">
+    
+    
+<div class="grid grid--no-gutters grid--table site-header__mobile-nav">
+      
+     <div class="grid__item medium-up--one-quarter homecontact evas-mod">
+        {{ pages.home-page-header1.content }}
+       </div>
+      
+      {% if section.settings.align_logo == 'center' %}
+        {%- assign logo_classes = 'medium-up--one-half  logo-align--center' -%}
+      {% else %}
+        {%- assign logo_classes = 'medium-up--one-quarter logo-align--left' -%}
+      {% endif %}
+
+      <div class="grid__item {{ logo_classes }}">
+        {% comment %}
+          Use the uploaded logo from theme settings if enabled.
+          Site name gets precedence with H1 tag on homepage, div on other pages.
+        {% endcomment %}
+        {% if template.name == 'index' %}
+          <h1 class="h2 site-header__logo">
+        {% else %}
+          <div class="h2 site-header__logo">
+        {% endif %}
+          {% if section.settings.logo %}
+            {%- assign img_url = section.settings.logo | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+            <a href="/" class="site-header__logo-image{% if section.settings.align_logo == 'center' %} site-header__logo-image--centered{% endif %}">
+              {% capture logo_alt %}{{ section.settings.logo.alt | default: shop.name }}{% endcapture %}
+              <img class="lazyload js"
+                   src="{{ section.settings.logo | img_url: '300x300' }}"
+                   
+                   data-src="{{ img_url }}"
+                   data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                   data-aspectratio="{{ section.settings.logo.aspect_ratio }}"
+                   data-sizes="auto"
+                   alt="{{ logo_alt | escape }}"
+                   style="max-width: {{ section.settings.logo_max_width }}px">
+              <noscript>
+                {% capture image_size %}{{ section.settings.logo_max_width | escape }}x{% endcapture %}
+                <img src="{{ section.settings.logo | img_url: image_size }}"
+                     srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                     alt="{{ section.settings.logo.alt | default: shop.name }}"
+                     style="max-width: {{ section.settings.logo_max_width }}px;">
+              </noscript>
+            </a>
+          {% else %}
+            <a class="site-header__logo-link" href="/">
+              
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 377.32 30.34">
+
+ <defs><style>.cls-new{fill:#fff;}</style></defs><title>{{shop.name }}</title><path class="cls-new" d="M22.69,21.9A3.24,3.24,0,0,0,25.58,24h.28v.33H18.43V24h.29A1.4,1.4,0,0,0,20,21.91l-2.11-5.63H9L6.76,21.93A1.4,1.4,0,0,0,8,24h.29v.32H1.67V24H2A3.26,3.26,0,0,0,4.86,21.9L12.34,4.14A17.58,17.58,0,0,0,13.56.74h.3Zm-5.2-6.61-4-10.59L9.36,15.29Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M52.73,1.2v.33h-.54a1.68,1.68,0,0,0-1.74,1.56V16.14c0,5.18-3.56,8.63-8.9,8.63S32.4,21.34,32.4,16.2v-13a1.69,1.69,0,0,0-1.75-1.64h-.53V1.2h6.7v.33h-.54a1.68,1.68,0,0,0-1.74,1.59V15.71c0,4.81,2.8,8,7,8,4.41,0,7.35-3,7.36-7.59v-13a1.69,1.69,0,0,0-1.75-1.59h-.54V1.2Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M83,13.57c-1.07,0-1.67.53-1.65,1.49v5.46c-1.51,2-4.59,4.25-9.55,4.25-7,0-11.86-4.83-11.86-12s4.84-12,11.85-12a14,14,0,0,1,8,2.23l.67,4.66h-.27c-1-3.78-4-5.9-8.39-5.9-5.59,0-9.38,4.41-9.38,11s3.79,11,9.38,11a11,11,0,0,0,7.45-2.86V15.07c0-1-.63-1.51-1.7-1.51h-.52v-.33h6.47v.33Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M112.72,1.2v.33h-.54a1.69,1.69,0,0,0-1.74,1.56V16.14c0,5.18-3.56,8.63-8.89,8.63-5.5,0-9.16-3.43-9.16-8.57v-13a1.68,1.68,0,0,0-1.74-1.64h-.54V1.2h6.7v.33h-.53a1.67,1.67,0,0,0-1.74,1.59V15.71c0,4.81,2.8,8,7,8,4.41,0,7.35-3,7.36-7.59v-13a1.68,1.68,0,0,0-1.74-1.59h-.54V1.2Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M130.63,14.57a5.22,5.22,0,0,1,1.66,4,5.82,5.82,0,0,1-6.19,6.17c-1.61,0-4.29-.47-5.58-1.81a10.08,10.08,0,0,1,.38-4.6h.29c-.33,3.4,1.82,5.58,4.76,5.42a4.41,4.41,0,0,0,4.42-4.43,4,4,0,0,0-1.29-3.07l-6.33-5.87a5.58,5.58,0,0,1,4-9.67,14.57,14.57,0,0,1,2.83.34h1.3V5.13h-.31a3.42,3.42,0,0,0-3.72-3.4,3.87,3.87,0,0,0-4.06,3.79,4.18,4.18,0,0,0,1.33,3.05Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M154.07,1.17a14.45,14.45,0,0,0,4-.6V4.72h-.34V4.12a2,2,0,0,0-1.88-2h-6.25V21.93A2.11,2.11,0,0,0,151.69,24h.42v.33h-7.22V24h.42a2.11,2.11,0,0,0,2.11-2V2.16h-6.26a2,2,0,0,0-1.88,2v.59H139V.57a14.43,14.43,0,0,0,4,.6Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M172,24.3h-7.22V24h.42a2.12,2.12,0,0,0,2.12-2.07V3.59a2.12,2.12,0,0,0-2.12-2.06h-.42V1.2H172v.33h-.41a2.11,2.11,0,0,0-2.12,2.05V21.9A2.11,2.11,0,0,0,171.59,24H172Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M204.37,1.2v.33h-.61a2,2,0,0,0-2,2V20.56a33.88,33.88,0,0,0,.3,4.21h-.3l-18-19.2V22a2,2,0,0,0,2,2h.61v.33h-6.8V24h.61a2,2,0,0,0,2-2V4.83a29.07,29.07,0,0,0-.3-4.12h.32l18,19.19V3.53a2,2,0,0,0-2-2h-.61V1.2Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M225.3,24.3H211.62V24H212a2.1,2.1,0,0,0,2.11-2.07V3.42a2.11,2.11,0,0,0-2.1-1.89h-.42V1.2h9.64a14.06,14.06,0,0,0,3.94-.6V4.77h-.33V4.17a2,2,0,0,0-1.85-2H216.3v10.2h5.58a1.61,1.61,0,0,0,1.59-1.62V10.3h.32v5.22h-.32V15a1.61,1.61,0,0,0-1.56-1.62H216.3v9.88H221c3.5,0,4.84-1.8,5.86-4.32h.33Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M254.38,1.2v.33H254a2.11,2.11,0,0,0-2.11,2.07V24.3c0,3.7-2.65,6.61-6,6.61v-.3c2.17-.76,3.87-3.57,3.86-6.4V3.6a2.1,2.1,0,0,0-2.11-2.07h-.42V1.2Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M275.66,24.3H262V24h.42a2.11,2.11,0,0,0,2.11-2.07V3.42a2.11,2.11,0,0,0-2.1-1.89H262V1.2h9.64a14.19,14.19,0,0,0,3.94-.6V4.77h-.34V4.17a2,2,0,0,0-1.85-2h-6.72v10.2h5.57a1.62,1.62,0,0,0,1.6-1.62V10.3h.32v5.22h-.32V15a1.61,1.61,0,0,0-1.56-1.62h-5.61v9.88h4.73c3.5,0,4.84-1.8,5.86-4.32h.33Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M315.91,1.2v.33h-.29a3.08,3.08,0,0,0-2.89,2.05L307.26,21a16.69,16.69,0,0,0-.72,3.67h-.31L299.48,5.83l-5,15.2a16.71,16.71,0,0,0-.69,3.67h-.32L286,3.54a3.11,3.11,0,0,0-2.89-2h-.26V1.2h7.33v.33h-.29a1.43,1.43,0,0,0-1.29,2l5,16.06L299.72.68l.31,0L306.54,19,311,3.5c.33-1.27-.38-2-1.28-2h-.29V1.2Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M335.35,24.3H321.67V24h.41a2.11,2.11,0,0,0,2.12-2.07V3.42a2.11,2.11,0,0,0-2.1-1.89h-.42V1.2h9.65a14,14,0,0,0,3.93-.6V4.77h-.33V4.17a2,2,0,0,0-1.85-2h-6.73v10.2h5.58a1.62,1.62,0,0,0,1.6-1.62V10.3h.32v5.22h-.32V15A1.62,1.62,0,0,0,332,13.41h-5.61v9.88h4.74c3.49,0,4.84-1.8,5.85-4.32h.33Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M360.11,19l-1.92,5.33H344.51V24h.42A2.11,2.11,0,0,0,347,21.9V3.61a2.12,2.12,0,0,0-2.11-2.08h-.42V1.2h7.23v.33h-.42a2.12,2.12,0,0,0-2.11,2.08V23.29h4.73c3.5,0,4.84-1.8,5.86-4.32Z" transform="translate(-1.67 -0.57)"/><path class="cls-new" d="M377.33,14.57a5.22,5.22,0,0,1,1.66,4,5.81,5.81,0,0,1-6.18,6.17c-1.62,0-4.29-.47-5.59-1.81a10.1,10.1,0,0,1,.39-4.6h.29c-.34,3.4,1.82,5.58,4.75,5.42a4.42,4.42,0,0,0,4.43-4.43,4,4,0,0,0-1.3-3.07l-6.32-5.87a5.56,5.56,0,0,1-1.79-4.09,5.53,5.53,0,0,1,5.8-5.58,14.39,14.39,0,0,1,2.83.34h1.31V5.13h-.32a3.42,3.42,0,0,0-3.71-3.4,3.87,3.87,0,0,0-4.06,3.79,4.18,4.18,0,0,0,1.33,3.05Z" transform="translate(-1.67 -0.57)"/>
+ 
+   
+   
+  </svg>
+              
+              
+            </a>
+          {% endif %}
+        {% if template.name == 'index' %}
+          </h1>
+        {% else %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.align_logo == 'left' %}
+        <nav class="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
+          {% include 'site-nav' %}
+        </nav>
+      {% endif %}
+
+      <div class="grid__item {% if section.settings.align_logo == 'left' %}medium-up--one-quarter{% else %} medium-up--one-quarter  {% endif %} text-right site-header__icons{% if shop.customer_accounts_enabled %} site-header__icons--plus{% endif %}">
+        <div class="site-header__icons-wrapper">
+          
+	 
+          <div class="currencyblock">{%- include 'bold-currency-picker-mount', openDirection: 'down' -%}</div>
+        
+          
+           <div class="site-header__search site-header__icon">
+            {% include 'search-form' %}
+          </div>
+
+       <button type="button" class="btn--link site-header__icon site-header__search-toggle js-drawer-open-top">
+            {% include 'icon-search' %}
+            <span class="icon__fallback-text">{{ 'layout.navigation.search' | t }}</span>
+          </button> 
+          
+          
+            {% if customer %}
+              <a href="/account" class="site-header__icon site-header__account">
+                {% include 'icon-login' %}
+                <span class="icon__fallback-text">{{ 'layout.customer.account' | t }}</span>
+              </a>
+            {% else %}
+              <a href="/account/login" class="site-header__icon site-header__account">
+                {% include 'icon-login' %}
+                <span class="icon__fallback-text">{{ 'layout.customer.log_in' | t }}</span>
+              </a>
+            {% endif %}
+         
+           
+
+          <a href="/cart" class="site-header__icon site-header__cart">
+            {% include 'icon-cart' %}
+            <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
+            {% if cart.item_count > 0 %}
+              <div id="CartCount" class="site-header__cart-count">
+                <span>{{ cart.item_count }}</span>
+                <span class="icon__fallback-text medium-up--hide">{{ 'layout.cart.items_count' | t: count: cart.item_count }}</span>
+              </div>
+            {% endif %}
+          </a>
+
+          {% if shop.enabled_currencies.size > 1 %}
+            {% form 'currency', class: "currency-selector small--hide hideblock" %}
+              <label for="CurrencySelector" class="visually-hidden">{{ 'general.currency.dropdown_label' | t }}</label>
+              <div class="currency-selector__input-wrapper select-group">
+                <select name="currency" id="CurrencySelector" class="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message" data-currency-selector>
+                  {% for currency in shop.enabled_currencies %}
+                    <option value="{{currency.iso_code}}"{% if currency == cart.currency %} selected="true"{% endif %}>{{currency.iso_code}}</option>
+                  {% endfor %}
+                </select>
+                {% include 'icon-chevron-down' %}
+              </div>
+            {% endform %}
+          {% endif %}
+
+          <!--
+          {% unless linklists[section.settings.main_linklist] == blank %}
+            <button type="button"  class="btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open" aria-controls="MobileNav"  aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+              {% include 'icon-hamburger' %}
+              {% include 'icon-close' %}
+            </button>
+          {% endunless %}
+			-->
+          
+          <div id="customMenu" style="font-size:30px;cursor:pointer;" onclick="openNav()">&#9776;</div>
+          
+<script>
+function openNav() {
+                    document.getElementById("sidenav").classList.add("menuwidth");
+                   }
+function closeNav() {
+                      document.getElementById("sidenav").classList.remove("menuwidth");
+                    }
+   
+  window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("stickyheader");
+//var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= 180) {
+    if(document.getElementById("checksticky").value=="1")
+    {
+    navbar.classList.add("sticky")
+    document.getElementById("checksticky").value = "0";
+    }
+  } else {
+    navbar.classList.remove("sticky");
+      document.getElementById("checksticky").value = "1";
+  }
+}
+</script>
+ <input type="hidden" name="checksticky" id="checksticky" value="1">
+          
+        </div>
+
+      </div>
+    </div>
+<!--<nav class="mobile-nav-wrapper medium-up--hide" role="navigation">-->
+    <nav class="mobile-nav-wrapper " role="navigation">
+      <ul id="MobileNav" class="mobile-nav">
+        {% for link in linklists[section.settings.main_linklist].links %}
+          {%- assign outerLoopIndex = forloop.index -%}
+
+          <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+            {% if link.links != blank %}
+              {% capture child_list_handle %}{{ link.handle }}-{{ outerLoopIndex }}{% endcapture %}
+              <button type="button" class="btn--link js-toggle-submenu mobile-nav__link{% if link.child_active %} mobile-nav__link--active{% endif %}" data-target="{{ child_list_handle }}" data-level="1" aria-expanded="false">
+                <span class="mobile-nav__label">{{ link.title }}</span>
+                <div class="mobile-nav__icon">
+                  {% include 'icon-chevron-right' %}
+                </div>
+              </button>
+              <ul class="mobile-nav__dropdown" data-parent="{{ child_list_handle }}" data-level="2">
+                <li class="visually-hidden" tabindex="-1" data-menu-title="2">
+                  {{- link.title }} {{ 'layout.navigation.menu' | t -}}
+                </li>
+                <li class="mobile-nav__item border-bottom">
+                  <div class="mobile-nav__table">
+                    <div class="mobile-nav__table-cell mobile-nav__return">
+                      <button class="btn--link js-toggle-submenu mobile-nav__return-btn" type="button" aria-expanded="true" aria-label="{{ link.title }}">
+                        {% include 'icon-chevron-left' %}
+                      </button>
+                    </div>
+                    <span class="mobile-nav__sublist-link mobile-nav__sublist-header mobile-nav__sublist-header--main-nav-parent">
+                      <span class="mobile-nav__label">{{ link.title }}</span>
+                    </span>
+                  </div>
+                </li>
+
+                {% for childlink in link.links %}
+                  <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+                    {% if childlink.links != blank %}
+                      {% capture grandchild_list_handle %}{{ childlink.handle }}-{{ outerLoopIndex }}-{{ forloop.index }}{% endcapture %}
+                      <button type="button" class="btn--link js-toggle-submenu mobile-nav__link mobile-nav__sublist-link" data-target="{{ grandchild_list_handle }}" aria-expanded="false">
+                        <span class="mobile-nav__label">{{ childlink.title }}</span>
+                        <div class="mobile-nav__icon">
+                          {% include 'icon-chevron-right' %}
+                        </div>
+                      </button>
+                      <ul class="mobile-nav__dropdown" data-parent="{{ grandchild_list_handle }}" data-level="3">
+                        <li class="visually-hidden" tabindex="-1" data-menu-title="3">
+                          {{- childlink.title }} {{ 'layout.navigation.menu' | t -}}
+                        </li>
+                        <li class="mobile-nav__item border-bottom">
+                          <div class="mobile-nav__table">
+                            <div class="mobile-nav__table-cell mobile-nav__return">
+                              <button type="button" class="btn--link js-toggle-submenu mobile-nav__return-btn" data-target="{{ child_list_handle }}" aria-expanded="true" aria-label="{{ childlink.title }}">
+                                {% include 'icon-chevron-left' %}
+                              </button>
+                            </div>
+                            <a href="{{ childlink.url }}" class="mobile-nav__sublist-link mobile-nav__sublist-header">
+                              <span class="mobile-nav__label">{{ childlink.title }}</span>
+                            </a>
+                          </div>
+                        </li>
+                        {% for grandchildlink in childlink.links %}
+                          <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+                            <a href="{{ grandchildlink.url }}" class="mobile-nav__sublist-link">
+                              <span class="mobile-nav__label">{{ grandchildlink.title | escape }}</span>
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      <a href="{{ childlink.url }}" class="mobile-nav__sublist-link">
+                        <span class="mobile-nav__label">{{ childlink.title | escape }}</span>
+                      </a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <a href="{{ link.url }}" class="mobile-nav__link{% if link.active %} mobile-nav__link--active{% endif %}">
+                <span class="mobile-nav__label">{{ link.title }}</span>
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+        {% if shop.enabled_currencies.size > 1 %}
+          <li class="mobile-nav__item border-top">
+            {% form 'currency', class: "currency-selector" %}
+              <label for="CurrencySelectorMobile" class="currency-selector__label">{{ 'general.currency.dropdown_label' | t }}</label>
+              <div class="currency-selector__input-wrapper select-group">
+                <select name="currency" id="CurrencySelectorMobile" class="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message" data-currency-selector>
+                  {% for currency in shop.enabled_currencies %}
+                    <option value="{{currency.iso_code}}"{% if currency == cart.currency %} selected="true"{% endif %}>{{currency.iso_code}}</option>
+                  {% endfor %}
+                </select>
+                {% include 'icon-chevron-down' %}
+              </div>
+            {% endform %}
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+<!--
+ {% if section.settings.align_logo == 'center' %}
+  <nav class="small--hide border-bottom" id="AccessibleNav" role="navigation">
+    {% include 'site-nav', nav_alignment: 'site-nav--centered' %}
+  </nav>
+  {% endif %} 
+-->
+  
+  
+</div>
+
+ {% include 'z-sidebar-menu'  %}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if section.settings.logo %}
+    {% assign image_size = section.settings.logo.width | append:'x' %}
+    "logo": "https:{{ section.settings.logo | img_url: image_size }}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
+</script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": {
+    "de": "Titel",
+    "en": "Header",
+    "es": "Encabezado",
+    "fr": "En-tête",
+    "it": "Header",
+    "ja": "ヘッダー",
+    "pt-BR": "Cabeçalho"
+  },
+  "settings": [
+    {
+      "type": "radio",
+      "id": "align_logo",
+      "label": {
+        "de": "Logo-Ausrichtung",
+        "en": "Logo alignment",
+        "es": "Alineación de logotipo",
+        "fr": "Alignement du logo",
+        "it": "Allineamento logo",
+        "ja": "ロゴアラインメント",
+        "pt-BR": "Alinhamento do logotipo"
+      },
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": {
+            "de": "Links",
+            "en": "Left",
+            "es": "Izquierda",
+            "fr": "Gauche",
+            "it": "Sinistra",
+            "ja": "左",
+            "pt-BR": "Esquerda"
+          }
+        },
+        {
+          "value": "center",
+          "label": {
+            "de": "Mittig",
+            "en": "Centered",
+            "es": "Centrada",
+            "fr": "Centré",
+            "it": "Centrato",
+            "ja": "中央揃え",
+            "pt-BR": "Centralizado"
+          }
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": {
+        "de": "Logo-Foto",
+        "en": "Logo image",
+        "es": "Logotipo",
+        "fr": "Image du logo",
+        "it": "Immagine del logo",
+        "ja": "ロゴ画像",
+        "pt-BR": "Imagem do logotipo"
+      }
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": {
+        "de": "Logobreite",
+        "en": "Custom logo width",
+        "es": "Ancho del logotipo personalizado",
+        "fr": "Largeur personnalisée du logo",
+        "it": "Larghezza logo personalizzato",
+        "ja": "ロゴの幅をカスタムする",
+        "pt-BR": "Largura do logotipo personalizado"
+      },
+      "min": 50,
+      "max": 250,
+      "step": 5,
+      "unit": {
+        "de": "px",
+        "en": "px",
+        "es": "px",
+        "fr": "px",
+        "it": "px",
+        "ja": "px",
+        "pt-BR": "px"
+      },
+      "default": 100
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist",
+      "label": {
+        "de": "Menü",
+        "en": "Menu",
+        "es": "Menú",
+        "fr": "Menu",
+        "it": "Menu",
+        "ja": "メニュー",
+        "pt-BR": "Menu"
+      },
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": {
+        "de": "Ankündigungsbereich",
+        "en": "Announcement bar",
+        "es": "Barra de anuncios",
+        "fr": "Barre d'annonces",
+        "it": "Barra degli annunci",
+        "ja": "告知バー",
+        "pt-BR": "Barra de anúncios"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "message",
+      "label": {
+        "de": "Ankündigung anzeigen",
+        "en": "Show announcement",
+        "es": "Mostrar anuncio",
+        "fr": "Afficher l'annonce",
+        "it": "Mostra annuncio",
+        "ja": "告知を表示する",
+        "pt-BR": "Exibir anúncio"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "home_page_only",
+      "label": {
+        "de": "Nur Startseite",
+        "en": "Home page only",
+        "es": "Solo página de inicio",
+        "fr": "Page d'accueil uniquement",
+        "it": "Solo home page",
+        "ja": "ホームページのみ",
+        "pt-BR": "Apenas página inicial"
+      },
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "message_text",
+      "label": {
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "pt-BR": "Texto"
+      },
+      "default": {
+        "de": "Hier etwas ankündigen",
+        "en": "Announce something here",
+        "es": "Anuncia algo aquí",
+        "fr": "Annoncez quelque chose ici",
+        "it": "Annuncia qualcosa qui",
+        "ja": "ここで告知してください",
+        "pt-BR": "Anuncie algo aqui"
+      }
+    },
+    {
+      "type": "url",
+      "id": "message_link",
+      "label": {
+        "de": "Link",
+        "en": "Link",
+        "es": "Enlace",
+        "fr": "Lien",
+        "it": "Link",
+        "ja": "リンク",
+        "pt-BR": "Link"
+      },
+      "info": {
+        "de": "Optional",
+        "en": "Optional",
+        "es": "Opcional",
+        "fr": "Facultatif",
+        "it": "Facoltativo",
+        "ja": "選択させる",
+        "pt-BR": "Opcional"
+      }
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": {
+        "de": "Zeile",
+        "en": "Bar",
+        "es": "Barra",
+        "fr": "Barre",
+        "it": "Barra",
+        "ja": "バー",
+        "pt-BR": "Barra"
+      },
+      "default": "#7796a8"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": {
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "pt-BR": "Texto"
+      },
+      "default": "#fff"
+    }
+  ]
+}
+{% endschema %}
+
+<head><!-- Event snippet for Website sale conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-302290407/u5yPCIXwzfMCEOerkpAB',
+      'transaction_id': ''
+  });
+  </script><!-- Global site tag (gtag.js) - Google Ads: 302290407 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-302290407"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-302290407');
+</script></head>

@@ -1,0 +1,65 @@
+<div class="page-width cust_padding20">
+  <div class="grid">
+    <div class="grid__item">
+      <div class="text-center section-header ">
+        <h1>{{ page.title }}</h1>
+      </div>
+
+      {% if page.content.size > 0 %}
+        <div class="cust_contact_content evas-mod">
+          {{ page.content }}
+        </div>
+      {% endif %}
+
+      <div class="cust_contact_block cust_booking clearfix"> 
+      <div class="cust_contact_block1 cust_booking_block1">
+        <h2>{{ pages.opening-hours.title }}</h2>
+      {{ pages.opening-hours.content }}
+      </div>
+      <div class="contact-form form-vertical cust_contact_block1 cust_contact_block2 cust_booking_block2">
+        {%- assign formId = 'ContactForm' -%}
+        {% form 'contact', id: formId %}
+          {% include 'form-status', form_id: formId %}
+        <h2>Book your Session</h2>
+        <div class="cust_contact_formtxt">
+        Fill in the form below to book an appointment with us. We will get back to you soon.
+        </div>
+         
+              <input class="cust_cont_input" placeholder="{{ 'contact.form.name' | t }}*" type="text" id="{{ formId }}-name" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+           
+              <input class="cust_cont_input" placeholder="{{ 'contact.form.email' | t }}*"
+                type="email"
+                id="{{ formId }}-email"
+                name="contact[email]"
+                autocorrect="off"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {%- if form.errors contains 'email' -%}
+                  class="input--error"
+                  aria-invalid="true"
+                  aria-describedby="{{ formId }}-email-error"
+                {%- endif -%}
+                >
+              {%- if form.errors contains 'email' -%}
+                <span id="{{ formId}}-email-error" class="input-error-message">{% include 'icon-error' %} {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+              {%- endif -%}
+         
+
+          <input class="cust_cont_input" type="text" placeholder="Date*" id="{{ formId }}-date" name="contact[date]"  value="{% if form[date] %}{{ form[date] }}{% elsif customer %}{{ customer.date }}{% endif %}">
+          <input class="cust_cont_input" type="text" placeholder="Time*" id="{{ formId }}-time" name="contact[time]"  value="{% if form[time] %}{{ form[time] }}{% elsif customer %}{{ customer.time }}{% endif %}">
+
+          <textarea class="cust_cont_inarea" placeholder="Interested in*" id="{{ formId }}-message" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+          <input type="submit" class="btn" value="{{ 'contact.form.submit' | t }}">
+
+        {% endform %}
+      </div>
+      </div>
+      
+       <div class="cust_contact_content cust_padding20 evas-mod">
+          {{ pages.book-a-consulation-block2.content }}
+        </div>
+    </div>
+  </div>
+</div>

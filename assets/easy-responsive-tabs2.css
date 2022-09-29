@@ -1,0 +1,59 @@
+.cust_prod_tab{margin-top:30px;}
+ul.tabs {
+	height: 52px;
+    background: #fbfaf8;
+    padding: 0 15px;
+    border-bottom: none;
+}
+ul.tabs li {
+    display: inline-block;
+    padding: 15px 15px 0px 0px;
+    list-style: none;
+    cursor: pointer;
+    float: left;
+   
+}
+ul.tabs li a {
+     font-size: 18px;
+    color: #000014;
+    text-transform: uppercase;
+  display: block;
+  margin: 0;
+  padding: 0 20px;
+  text-decoration: none;
+  width: auto;
+}
+ul.tabs li a:hover, a.active {
+  color: #bba675 !important;
+ 
+}
+ul.tabs li:first-child a.active {
+  margin-left: 0;
+}
+ul.tabs li:first-child a {
+  border-top-left-radius: 2px;
+  border-width: 1px 1px 0;
+}
+ul.tabs li:last-child a {
+  border-top-right-radius: 2px;
+}
+ul.tabs:before, ul.tabs:after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+}
+ul.tabs:after {
+  clear: both;
+}
+.resp-tabs-container.hor_1{padding-top:20px; padding-bottom;20px;}
+
+@media only screen and (max-width: 980px) {
+ul.tabs {height:auto;padding-bottom:15px;}
+ul.tabs li{padding-right:0px;}
+}
+@media only screen and (max-width: 550px) {
+  ul.tabs li{float:none; width:100%; text-align:center;}
+}

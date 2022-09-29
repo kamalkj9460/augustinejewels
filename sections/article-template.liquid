@@ -1,0 +1,238 @@
+<div class="section-header cust_padding20 text-center">
+  <h1 class="article__title">{{ article.title }}</h1>
+</div>
+
+<div class="text-center cust-article-content">
+  {{ article.content }}
+</div>
+
+<div class="cust_article_block1 clearfix">
+  <div class="cust_article_left">
+    {% if section.settings.blog_show_author %}
+    <div class="article__author">
+       {% include 'icon-user' %}
+      Posted {{ 'blogs.article.by_author' | t: author: article.author }}</div><br/>
+  {% endif %}
+    
+    {% if section.settings.blog_show_date %}
+    <div class="article__date article__date-new ">
+      {% include 'icon-calander' %}
+      {{ article.published_at | time_tag: format: 'month_day_year' }}
+    </div>
+  {% endif %}
+    <div class="article__count">
+        {% include 'icon-chat' %}
+    {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+    </div>
+    <h2> SHARE THIS BLOG</h2>
+{% include 'social-sharing2', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+  </div>
+
+{%- if comment.status == 'pending' -%}
+  {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+{%- else -%}
+  {%- assign number_of_comments = article.comments_count -%}
+{%- endif -%}
+  
+{% if blog.comments_enabled? %}
+  {% if number_of_comments > 0 %}
+
+<div class="" style="display:none;">
+      <div class="grid">
+        <div class="grid__item ">
+          <h2 class="h3">{{ 'blogs.comments.comments_with_count' | t: count: number_of_comments }}</h2>
+
+          {% paginate article.comments by 5 %}
+
+            {% comment %}
+              #comments is required, it is used as an anchor link by Shopify.
+            {% endcomment %}
+            <div id="comments">
+              <ul class="comments">
+                {% comment %}
+                  If a comment was just submitted with no blank field, show it.
+                {% endcomment %}
+                {% if comment.status == 'pending' %}
+                  <li id="{{ comment.id }}" class="comment">
+                    {% include 'comment' %}
+                  </li>
+                {% endif %}
+
+                {% for comment in article.comments %}
+                  <li id="{{ comment.id }}" class="comment">
+                    {% include 'comment' %}
+                  </li>
+                {% endfor %}
+              </ul>
+
+              {% if paginate.pages > 1 %}
+                {% include 'pagination' %}
+              {% endif %}
+
+            </div>
+          {% endpaginate %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+<div class="cust_article_left cust_article_right">
+  <div class="">
+    <div class="grid">
+      <div class="grid__item ">
+        <div class="comment-form form-vertical">
+          {% form 'new_comment', article %}
+
+            {%- assign formId = 'CommentForm' -%}
+
+            <h2 class="h3">Post Comment <!--{{ 'blogs.comments.title' | t }}--></h2>
+
+            {%- assign post_message = 'blogs.comments.success' -%}
+            {%- if blog.moderated? and comment.status == 'pending' -%}
+              {%- assign post_message = 'blogs.comments.success_moderated' -%}
+            {%- elsif comment.status == 'unapproved' or comment.status == 'spam' -%}
+              {%- assign post_message = 'blogs.comments.unapproved' -%}
+            {%- endif -%}
+
+            {% include 'form-status', form_id: formId, success_message: post_message %}
+
+            <div class="grid">
+
+              <div class="grid__item ">
+                <input class="cust_art_input" placeholder="{{ 'blogs.comments.name' | t }}" type="text" name="comment[author]" id="{{ formId }}-author" class="input-full{% if form.errors contains 'author' %} input--error{% endif %}" value="{{ form.author }}"{% if form.errors contains 'author' %} aria-invalid="true" aria-describedby="{{ formId}}-author-error"{% endif %}>
+                {% if form.errors contains 'author' %}
+                  <span id="{{ formId}}-author-error" class="input-error-message">{% include 'icon-error' %} {{ 'blogs.comments.name' | t }} {{ form.errors.messages['author'] }}.</span>
+                {% endif %}
+              </div>
+
+              <div class="grid__item ">
+                <input class="cust_art_input" placeholder="{{ 'blogs.comments.email' | t }}" type="email" name="comment[email]" id="{{ formId }}-email" class="input-full{% if form.errors contains 'email' %} input--error{% endif %}" value="{{ form.email }}" autocorrect="off" autocapitalize="off" {% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="{{ formId}}-email-error"{% endif %}>
+                {% if form.errors contains 'email' %}
+                  <span id="{{ formId}}-email-error" class="input-error-message">{% include 'icon-error' %} {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+                {% endif %}
+              </div>
+
+              <div class="grid__item">
+                <textarea class="cust_art_inputarea" placeholder="{{ 'blogs.comments.message' | t }}" name="comment[body]" id="{{ formId }}-body" class="input-full{% if form.errors contains 'body' %} input--error{% endif %}"{% if form.errors contains 'body' %} aria-invalid="true" aria-describedby="{{ formId}}-body-error"{% endif %}>{{ form.body }}</textarea>
+                {% if form.errors contains 'body' %}
+                  <span id="{{ formId}}-body-error" class="input-error-message">{% include 'icon-error' %} {{ 'blogs.comments.message' | t }} {{ form.errors.messages['body'] }}.</span>
+                {% endif %}
+              </div>
+
+            </div>
+
+            {% if blog.moderated? %}
+              <p class="fine-print" style="display:none;">{{ 'blogs.comments.moderated' | t }}</p>
+            {% endif %}
+
+            <input type="submit" class="btn" value="SUBMIT">
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+{% endif %}
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "articleBody": "{{ article.content | strip_html }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ shop.url }}{{ page.url }}"
+  },
+  "headline": "{{ article.title }}",
+  {% if article.excerpt != blank %}
+    "description": "{{ article.excerpt | strip_html }}",
+  {% endif %}
+  {% if article.image %}
+    {% assign image_size = article.image.width | append: 'x' %}
+    "image": [
+      "https:{{ article | img_url: image_size }}"
+    ],
+  {% endif %}
+  "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "dateCreated": "{{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    {% if settings.share_image %}
+      {% assign image_size = settings.share_image.width | append: 'x' %}
+      "logo": {
+        "@type": "ImageObject",
+        "height": "{{ settings.share_image.height }}",
+        "url": "https:{{ settings.share_image | img_url: image_size }}",
+        "width": "{{ settings.share_image.width }}"
+      },
+    {% endif %}
+    "name": "{{ shop.name }}"
+  }
+}
+</script>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Posts",
+    "en": "Posts",
+    "es": "Publicaciones",
+    "fr": "Articles",
+    "it": "Articoli",
+    "ja": "投稿",
+    "pt-BR": "Posts"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": {
+        "de": "Autor anzeigen",
+        "en": "Show author",
+        "es": "Mostrar autor",
+        "fr": "Afficher l'auteur",
+        "it": "Mostra autore",
+        "ja": "執筆者を表示する",
+        "pt-BR": "Exibir autor(a)"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": {
+        "de": "Datum anzeigen",
+        "en": "Show date",
+        "es": "Mostrar fecha",
+        "fr": "Afficher la date",
+        "it": "Mostra data",
+        "ja": "日付を表示する",
+        "pt-BR": "Exibir data"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": {
+        "de": "Buttons für Social Media anzeigen",
+        "en": "Show social sharing buttons",
+        "es": "Mostrar botones para compartir en redes sociales",
+        "fr": "Afficher les boutons de partage sur les médias sociaux",
+        "it": "Mostra i pulsanti per la condivisione sui social",
+        "ja": "ソーシャル共有ボタンを表示する",
+        "pt-BR": "Exibir botões de compartilhamento em redes sociais"
+      },
+      "default": true
+    }
+  ]
+}
+{% endschema %}

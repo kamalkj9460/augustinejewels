@@ -1,0 +1,84 @@
+
+
+{% unless current_collection %}
+{% assign current_collection = collection %}
+{% endunless %}
+
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+{% assign on_sale = true %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available  %}
+{% assign sold_out = false %}
+{% endif %}
+{% assign img_size = settings.img_size_grid %}
+<!-- Block2 -->
+
+
+<li class="grid__item grid__item--collection-template small--one-half medium-up--one-quarter">
+<div class="block2">
+  {% assign product_created_at = product.created_at | date: '%s' %}
+  {% assign time_ago = 'now' | date: '%s' | minus: product_created_at | divided_by: 86400 %}
+  {% assign product_new_time = settings.product_new_time | times: 1 %}
+    {% unless product.featured_image == blank %}
+    {% include 'image-style' with image: product.featured_image, width: max_height, height: max_height, small_style: true, wrapper_id: wrapper_id, img_id: img_id %}
+  {% endunless %}
+  <div class="block2-img product-card__image-wrapper2 wrap-pic-w of-hidden pos-relative {% if time_ago < product_new_time %}block2-labelnew{% endif %} {% if on_sale %} block2-labelsale{% endif %}">
+    <a href="{{ product.url | within: collection }}">
+     
+       <img id="{{ img_id }}"
+            class="grid-view-item__image lazyload"
+            src="{{ product.featured_image | img_url: '300x300' }}"
+            data-src="{{ img_url }}"
+            data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+            data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+            data-sizes="auto"
+            alt="">
+    </a>
+    <div class="block2-overlay trans-0-4">
+      <a href="{{ product.url }}" class="block2-btn-addwishlist hov-pointer trans-0-4">
+        <!-- <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
+        <i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i> -->
+      </a>
+      
+    </div>
+  </div>
+  <div class="catproudct block2-txt p-t-20">
+    <a href="{{ product.url | within: collection }}" class="block2-name dis-block s-text3 p-b-5">
+      
+      <span class="product-card__title2"> {{ product.title | truncate: 34 }}</span>
+    </a>
+    <span class="block2-name-new">
+    
+       {% for collection in product.collections %}{% assign coll = collection.handle | downcase %}
+  
+   {% if coll == 'rings' or coll == 'necklaces' or coll == 'earrings' or coll == 'bracelets' or coll == 'cufflinks-shirt-studs' %}
+      
+   {% else %}
+   {{ collection.title }} collection
+     
+   {% endif %}
+      
+   {% endfor %}
+    </span>
+    
+    {% if product.tags contains 'POA' %}Price on application
+    {% else %}
+    {% if product.compare_at_price > product.price %}
+    <span class="block2-oldprice m-text7 p-r-5 money">
+      {{ product.compare_at_price_max | money }}
+    </span>
+    <span class="block2-newprice m-text8 p-r-5 money">
+      {{ product.price | money }}
+    </span>
+    {% else %}
+    <span class="block2-price m-text6 p-r-5 money">
+      {{ product.price | money }}
+    </span>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+</li>

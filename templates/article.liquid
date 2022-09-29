@@ -1,0 +1,31 @@
+{%- comment -%}
+  Comments may not appear right after they are submitted, either to be checked by Shopify's spam filter
+  or to await moderation. When a comment is submitted, the browser is redirected to a page
+  that includes the new comment id in its URL.
+    Example: http://shopname.myshopify.com/blogs/news/2022072-my-post?comment=3721372
+{%- endcomment -%}
+
+{%- if comment.status == 'pending' -%}
+  {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+{%- else -%}
+  {%- assign number_of_comments = article.comments_count -%}
+{%- endif -%}
+
+<article class="page-width">
+  <div class="grid">
+    <div class="grid__item ">
+      {% section 'article-template' %}
+    </div>
+  </div>
+</article>
+
+
+
+
+<div class="text-center return-link-wrapper page-width">
+  <a href="{{ blog.url }}" class="btn btn--secondary btn--has-icon-before return-link">
+    {% include 'icon-arrow-left' %}
+    {{ 'blogs.article.back_to_blog' | t: title: blog.title }}
+  </a>
+</div>
+
