@@ -1,11 +1,22 @@
 <!doctype html>
 <html class="no-js" lang="{{ shop.locale }}">
 <head>
+
+{% if template contains "index" %}
+	{% render "index-css" %}
+{% elsif template contains "collection" %}
+	{% render "collection-css" %}
+{% elsif template contains "product" %}
+	{% render "product-css" %}
+{% else %}
+	{% render "critical-css" %}
+{% endif %}
+<style class="critical2">.popup_apt{display:none}</style> 
 <!-- Google Tag Manager -->
-  <script>
+  <script type="lazyload2">
     window.dataLayer = window.dataLayer || [];
 </script>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<script type="lazyload2">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -46,8 +57,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   {%- endif -%}
 
   <!-- Global site tag (gtag.js) - Google Ads: 969046524 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-969046524"></script>
-<script>
+<script type="lazyload2" data-src="https://www.googletagmanager.com/gtag/js?id=AW-969046524"></script>
+<script type="lazyload2">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -59,17 +70,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- FONT FILE LINK -->
 
 <link rel="stylesheet" href="https://use.typekit.net/vxz1fgr.css">
-
-
 <link href="//fonts.googleapis.com/css?family=Cinzel:400,700,900" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  
-  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
-  {{ 'style.css' | asset_url | stylesheet_tag }}
-  
-   {{ 'jquery.mCustomScrollbar.css' | asset_url | stylesheet_tag }}
-  
 
+  <link data-href="{{ 'theme.scss.css' | asset_url }}" rel="stylesheet" />
+  <link data-href="{{ 'style.css' | asset_url }}" rel="stylesheet" />
+  <link data-href="{{ 'jquery.mCustomScrollbar.css' | asset_url }}" rel="stylesheet" />
 
   <script>
     var theme = {
@@ -95,12 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
   </script>
 
-
- 
-
-  
     {%- if template.name == 'product' -%}
-  {{ 'easy-responsive-tabs2.css' | asset_url | stylesheet_tag }}
+  <link data-href="{{ 'easy-responsive-tabs2.css' | asset_url }}" rel="stylesheet" />
   <script>
       $(document).ready(function() {
     $('ul.tabs').each(function(){
@@ -134,7 +136,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
  <script src="{{ 'jquery.mCustomScrollbar.concat.min.js' | asset_url }}" defer="defer"></script>
 
-  {{ content_for_header }}
+     {%- if request.design_mode or template contains 'cart' or template contains 'checkout' -%}
+    	{{ content_for_header }}
+        {%- else -%}
+    	{% capture content_for_header2 %}{{ content_for_header }}{% endcapture %}
+    	{{ content_for_header2 | replace: ' defer="defer" ', ' type="lazyload2" ' | replace: " src=", " data-src=" | replace: "window.addEventListener('load', asyncLoad, false);", "window.addEventListener('wnw_load', asyncLoad, false);" | replace: "DOMContentLoaded", "DOMContentLoaded2" }}
+    	<script>var trekkie=[];trekkie.integrations=!0;window.BOOMR={},window.BOOMR.version=true;</script>
+    {%- endif -%}
+
 {%- include 'bold-common' -%}
 
   <style>
@@ -216,17 +225,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="popup_apt " id="augcust_popup" >
 <div class="popup_apt1">
  <div class="btn_4"><a href="javascript:void(0);" onclick="accept();">x</a></div>
-<div class="powr-form-builder" id="223ed19c_1630501734"></div><script src="https://www.powr.io/powr.js?platform=shopify"></script>
+<div class="powr-form-builder" id="223ed19c_1630501734"></div>
+<script type="lazyload2" data-src="https://www.powr.io/powr.js?platform=shopify"></script>
 </div></div>
- 
-  
-  
-  
+{{ 'wnw-optimization.js' | asset_url | script_tag }}
 </body>
 </html>
 
-<script type="text/javascript">
-  $(document).ready(function () {
+<script type="lazyload2">
+  setTimeout(function () {
   checkCookie();
    var username = "augpop-cookie";
   setCookie("username", username, 1);

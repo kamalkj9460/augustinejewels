@@ -39,7 +39,7 @@
     {%- endif -%}
 
     {% if section.settings.show_collection_image and collection.image %}
-      <div class="catcontainer" style="background-image: url({{ collection.image | img_url: 'master' }});">
+      <div class="catcontainer" style="background-image: url({{ collection.image | img_url: '1024x' }});">
        <div class="page-width">
         <noscript>
           <div class="" style="background-image: url({{ collection.image | img_url: '2048x600', crop: 'top' }});"></div>

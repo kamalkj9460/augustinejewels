@@ -1,9 +1,8 @@
 <link rel="dns-prefetch" href="https://cdn.secomapp.com/">
 <link rel="dns-prefetch" href="https://ajax.googleapis.com/">
 <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/">
-<link rel="preload" as="stylesheet" href="{{ 'sca-pp.css' | asset_url }}">
 
-<link rel="stylesheet" href="{{ 'sca-pp.css' | asset_url }}">
+<link rel="stylesheet" data-href="{{ 'sca-pp.css' | asset_url }}">
  <script>
   {%if content_for_header contains "cdn.secomapp.com\/promotionpopup\/cdn" %}
     SCAPPLive = {};

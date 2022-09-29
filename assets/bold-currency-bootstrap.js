@@ -76,7 +76,7 @@ function BOLD_mc_bootstrap(options) {
     };
   }
 
-  document.addEventListener('DOMContentLoaded', function (event) {
+  setTimeout(function() {
     if (window.jQuery && jQuery().on) {
       jQuery('.bold_product_page_price').parent().each(function (i, parent) {
         BOLD.helpers.setupMutationObservers(parent, 'BOLD_CURRENCY_product_price_updated');
